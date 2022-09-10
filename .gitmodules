@@ -1,0 +1,6 @@
+[submodule "Sources/bls-signatures"]
+	path = Sources/bls-signatures
+	url = https://github.com/Chia-Network/bls-signatures
+[submodule "Sources/relic"]
+	path = Sources/relic
+	url = https://github.com/relic-toolkit/relic
