@@ -30,7 +30,7 @@ Util::SecureFreeCallback Util::secureFreeCallback;
 static void relic_core_initializer(void* ptr)
 {
     core_init();
-    if (err_get_code() != RLC_OK) {
+    if (err_get_code_2() != RLC_OK) {
         throw std::runtime_error("core_init() failed");
     }
 

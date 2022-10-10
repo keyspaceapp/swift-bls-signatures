@@ -348,6 +348,6 @@ void err_get_msg(err_t *e, char **msg);
  *
  * @returns ERR_OK if no errors occurred in the function, ERR_ERR otherwise.
  */
-int err_get_code(void);
+int err_get_code_2(void);
 
 #endif /* !RLC_ERR_H */
