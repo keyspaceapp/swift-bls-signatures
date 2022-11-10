@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface G1Element: NSObject
 
 + (size_t)SIZE;
@@ -17,6 +19,8 @@
 @end
 
 @interface G2Element: NSObject
+
++ (size_t)SIZE;
 
 - (G2Element *)init;
 
@@ -44,8 +48,10 @@
 + (G2Element *)aggregate:(NSArray<G2Element *> *)signatures;
 + (G2Element *)sign:(PrivateKey *)pk msg:(NSData *)msg;
 
-+ (BOOL)verify:(NSData *)pk msg:(NSData *)msg sig:(NSData *)sig;
++ (BOOL)verify:(G1Element *)pk msg:(NSData *)msg sig:(G2Element *)sig;
 + (BOOL)aggregate_verify:(NSArray<G1Element *> *)pks msgs:(NSArray<NSData *> *)msgs sig:(G2Element *)sig;
 
 @end
+
+NS_ASSUME_NONNULL_END
 

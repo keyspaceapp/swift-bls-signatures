@@ -39,14 +39,7 @@
 
 - (NSData *)get_bytes
 {
-    uint8_t *output =
-        bls::Util::SecAlloc<uint8_t>(bls::PrivateKey::PRIVATE_KEY_SIZE);
-    
-    bls::PrivateKey k = bls::PrivateKey::FromBytes(bls::Bytes((uint8_t *)_bytes.bytes, bls::PrivateKey::PRIVATE_KEY_SIZE));
-    k.Serialize(output);
-    NSData *ret = [NSData dataWithBytes:output length:bls::PrivateKey::PRIVATE_KEY_SIZE];
-    bls::Util::SecFree(output);
-    return ret;
+    return _bytes;
 }
 
 @end
@@ -106,13 +99,7 @@
 
 - (NSData *)get_bytes
 {
-    const bls::Bytes bytes = bls::Bytes((uint8_t *)_bytes.bytes, bls::G1Element::SIZE);
-    bls::G1Element ele = bls::G1Element().FromBytes(bytes);
-    
-    vector<uint8_t> out;
-    out = ele.Serialize();
-    
-    return [NSData dataWithBytes:out.data() length:out.size()];
+    return _bytes;
 }
 
 - (BOOL)isEqual:(nullable id)object
@@ -176,6 +163,11 @@
 
 }
 
++ (size_t)SIZE
+{
+    return bls::G2Element::SIZE;
+}
+
 + (G2Element *)from_bytes:(NSData *)b
 {
     return [[G2Element alloc] initWithBytes:b];
@@ -183,10 +175,7 @@
 
 - (NSData *)get_bytes
 {
-    const bls::Bytes bytes = bls::Bytes((uint8_t *)_bytes.bytes, bls::G2Element::SIZE);
-    bls::G2Element ele = bls::G2Element().FromBytes(bytes);
-    vector<uint8_t> out = ele.Serialize();
-    return [NSData dataWithBytes:out.data() length:out.size()];
+    return _bytes;
 }
 
 @end
@@ -203,12 +192,16 @@
     return [[PrivateKey alloc] initWithBytes:pkData];
 }
 
-+ (BOOL)verify:(NSData *)pk msg:(NSData *)msg sig:(NSData *)sig;
++ (BOOL)verify:(G1Element *)pk msg:(NSData *)msg sig:(G2Element *)sig;
 {
-    const bls::Bytes pkBytes =  bls::Bytes((uint8_t *)pk.bytes, pk.length);
+    NSData *pk_data = pk.get_bytes;
+    const uint8_t *pk_bytes = (const uint8_t *)pk_data.bytes;
+    const bls::Bytes pkBytes =  bls::Bytes(pk_bytes, pk_data.length);
     const bls::G1Element pk2 = bls::G1Element::FromBytes(pkBytes);
     
-    const bls::Bytes sigBytes = bls::Bytes((uint8_t *)sig.bytes, sig.length);
+    NSData *sig_data = sig.get_bytes;
+    const uint8_t *sig_bytes = (const uint8_t *)sig_data.bytes;
+    const bls::Bytes sigBytes = bls::Bytes(sig_bytes, sig_data.length);
     const bls::G2Element sig2 = bls::G2Element::FromBytes(sigBytes);
     
 //    std::string s((char *)msg.bytes);
